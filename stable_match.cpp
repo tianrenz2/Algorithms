@@ -29,19 +29,30 @@ void stableMatch(vector<vector<int>> graph, int n){
   map<int, int> match_map;
   vector<int> std_in_need;
 
+  //Firstly we create a map from bike to studnet regarding to their distances,
+  //b2s_map is a map that maps from integers to vectors.
+  //Let's say we have student s1 and bike b1, the distance is d1, then we store it in the
+  //b2s_map in the way that b2s_map[b1][s1] = d1.
   for(vector<int> pair : graph){
     if(b2s_map[pair[1]].size() == 0)
       b2s_map[pair[1]] = vector<int>(n);
     b2s_map[pair[1]][pair[0]] = pair[2];
   }
 
+//Initially we push all the students in std_in_need queue since none of the students has been assigned a bike
   for(int i = 0; i < n; i++){
     std_in_need.push_back(i);
   }
 
+
   while(std_in_need.size() > 0){
     int std = std_in_need[0];
 
+    //For each student in the std_in_need queue, we iterate all the bikes, if a bike is not matched with
+    //any other student, we have this student match with this bike, if a bike is already matched with
+    //another student, who is the bike holder, we compare the distances of these two students and
+    //if the current student is closer to the bike than the bike holder studnet is, then we replace the
+    //bike holder student with the current studnet, and we add the bike holder student back to the std_in_need queue.
     for(int b = 0; b < n; b++){
       if(!match_map.count(b)){
         match_map[b] = std;
@@ -60,7 +71,7 @@ void stableMatch(vector<vector<int>> graph, int n){
     }
 
   }
-  
+
   int total_dist = 0;
 
   for(int i = 0; i < n; i++){
